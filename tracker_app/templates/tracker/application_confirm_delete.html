@@ -4,54 +4,54 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="bg-white rounded-lg shadow p-6 sm:p-8">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 sm:p-8 transition-colors duration-300">
         <div class="flex items-center mb-6">
             <div class="flex-shrink-0">
                 <i class="fas fa-exclamation-triangle text-red-500 text-xl sm:text-2xl"></i>
             </div>
             <div class="ml-4">
-                <h1 class="text-lg sm:text-xl font-bold text-gray-900">Delete Application</h1>
-                <p class="text-gray-600 mt-1 text-sm sm:text-base">This action cannot be undone.</p>
+                <h1 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Delete Application</h1>
+                <p class="text-gray-600 dark:text-gray-400 mt-1 text-sm sm:text-base">This action cannot be undone.</p>
             </div>
         </div>
 
-        <div class="bg-gray-50 rounded-lg p-6 mb-6">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Application Details</h3>
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-6 transition-colors duration-300">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Application Details</h3>
             <div class="space-y-3">
                 <div class="flex justify-between">
-                    <span class="font-medium text-gray-700">Company:</span>
-                    <span class="text-gray-900">{{ application.company_name }}</span>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Company:</span>
+                    <span class="text-gray-900 dark:text-white">{{ application.company_name }}</span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="font-medium text-gray-700">Role:</span>
-                    <span class="text-gray-900">{{ application.role }}</span>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Role:</span>
+                    <span class="text-gray-900 dark:text-white">{{ application.role }}</span>
                 </div>
                 {% if application.location %}
                 <div class="flex justify-between">
-                    <span class="font-medium text-gray-700">Location:</span>
-                    <span class="text-gray-900">{{ application.location }}</span>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Location:</span>
+                    <span class="text-gray-900 dark:text-white">{{ application.location }}</span>
                 </div>
                 {% endif %}
                 <div class="flex justify-between">
-                    <span class="font-medium text-gray-700">Status:</span>
-                    <span class="inline-block bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-full">
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Status:</span>
+                    <span class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm px-2 py-1 rounded-full">
                         {{ application.get_status_display }}
                     </span>
                 </div>
                 <div class="flex justify-between">
-                    <span class="font-medium text-gray-700">Applied Date:</span>
-                    <span class="text-gray-900">{{ application.applied_date|date:"F d, Y" }}</span>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Applied Date:</span>
+                    <span class="text-gray-900 dark:text-white">{{ application.applied_date|date:"F d, Y" }}</span>
                 </div>
                 {% if application.interview_date %}
                 <div class="flex justify-between">
-                    <span class="font-medium text-gray-700">Interview Date:</span>
-                    <span class="text-gray-900">{{ application.interview_date|date:"F d, Y" }}</span>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Interview Date:</span>
+                    <span class="text-gray-900 dark:text-white">{{ application.interview_date|date:"F d, Y" }}</span>
                 </div>
                 {% endif %}
             </div>
         </div>
 
-        <p class="text-gray-700 mb-8">
+        <p class="text-gray-700 dark:text-gray-300 mb-8">
             Are you sure you want to delete this application? This will permanently remove all information 
             associated with this application from your tracker.
         </p>
@@ -59,7 +59,7 @@
         <form method="post" class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
             {% csrf_token %}
             <a href="{% url 'dashboard' %}" 
-               class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 font-medium inline-flex items-center justify-center">
+               class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium inline-flex items-center justify-center transition-colors duration-300">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Cancel
             </a>

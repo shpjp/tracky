@@ -4,15 +4,15 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="bg-white rounded-lg shadow p-6 sm:p-8">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 sm:p-8 transition-colors duration-300">
         <div class="mb-6">
             <div class="flex items-center space-x-3 mb-4">
                 <div class="flex-shrink-0">
                     <i class="fas fa-{% if application %}edit{% else %}plus{% endif %} text-primary text-xl sm:text-2xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900">{{ title }}</h1>
-                    <p class="text-gray-600 mt-1 text-sm sm:text-base">Fill out the form below to {% if application %}update{% else %}add{% endif %} your job application.</p>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{{ title }}</h1>
+                    <p class="text-gray-600 dark:text-gray-400 mt-1 text-sm sm:text-base">Fill out the form below to {% if application %}update{% else %}add{% endif %} your job application.</p>
                 </div>
             </div>
         </div>
@@ -22,92 +22,92 @@
             
             <div class="grid grid-cols-1 gap-6">
                 <div>
-                    <label for="{{ form.company_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="{{ form.company_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Company Name *
                     </label>
                     {{ form.company_name }}
                     {% if form.company_name.errors %}
-                        <div class="text-red-600 text-sm mt-1">{{ form.company_name.errors.0 }}</div>
+                        <div class="text-red-600 dark:text-red-400 text-sm mt-1">{{ form.company_name.errors.0 }}</div>
                     {% endif %}
                 </div>
 
                 <div>
-                    <label for="{{ form.role.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="{{ form.role.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Role *
                     </label>
                     {{ form.role }}
                     {% if form.role.errors %}
-                        <div class="text-red-600 text-sm mt-1">{{ form.role.errors.0 }}</div>
+                        <div class="text-red-600 dark:text-red-400 text-sm mt-1">{{ form.role.errors.0 }}</div>
                     {% endif %}
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                    <label for="{{ form.location.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="{{ form.location.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Location
                     </label>
                     {{ form.location }}
                     {% if form.location.errors %}
-                        <div class="text-red-600 text-sm mt-1">{{ form.location.errors.0 }}</div>
+                        <div class="text-red-600 dark:text-red-400 text-sm mt-1">{{ form.location.errors.0 }}</div>
                     {% endif %}
                 </div>
 
                 <div>
-                    <label for="{{ form.status.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="{{ form.status.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Status *
                     </label>
                     {{ form.status }}
                     {% if form.status.errors %}
-                        <div class="text-red-600 text-sm mt-1">{{ form.status.errors.0 }}</div>
+                        <div class="text-red-600 dark:text-red-400 text-sm mt-1">{{ form.status.errors.0 }}</div>
                     {% endif %}
                 </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                    <label for="{{ form.applied_date.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="{{ form.applied_date.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Applied Date *
                     </label>
                     {{ form.applied_date }}
                     {% if form.applied_date.errors %}
-                        <div class="text-red-600 text-sm mt-1">{{ form.applied_date.errors.0 }}</div>
+                        <div class="text-red-600 dark:text-red-400 text-sm mt-1">{{ form.applied_date.errors.0 }}</div>
                     {% endif %}
                 </div>
 
                 <div>
-                    <label for="{{ form.interview_date.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="{{ form.interview_date.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Interview Date
                     </label>
                     {{ form.interview_date }}
                     {% if form.interview_date.errors %}
-                        <div class="text-red-600 text-sm mt-1">{{ form.interview_date.errors.0 }}</div>
+                        <div class="text-red-600 dark:text-red-400 text-sm mt-1">{{ form.interview_date.errors.0 }}</div>
                     {% endif %}
                 </div>
             </div>
 
             <div>
-                <label for="{{ form.notes.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="{{ form.notes.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Notes
                 </label>
                 {{ form.notes }}
                 {% if form.notes.errors %}
-                    <div class="text-red-600 text-sm mt-1">{{ form.notes.errors.0 }}</div>
+                    <div class="text-red-600 dark:text-red-400 text-sm mt-1">{{ form.notes.errors.0 }}</div>
                 {% endif %}
-                <p class="text-sm text-gray-500 mt-1">Any additional notes about this application</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Any additional notes about this application</p>
             </div>
 
             {% if form.non_field_errors %}
-                <div class="bg-red-50 border border-red-200 rounded-md p-4">
-                    <div class="text-red-800">
+                <div class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-600 rounded-md p-4">
+                    <div class="text-red-800 dark:text-red-200">
                         {{ form.non_field_errors }}
                     </div>
                 </div>
             {% endif %}
 
-            <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t">
+            <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-6 border-t border-gray-200 dark:border-gray-700">
                 <a href="{% url 'dashboard' %}" 
-                   class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 font-medium inline-flex items-center justify-center">
+                   class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium inline-flex items-center justify-center transition-colors duration-300">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Cancel
                 </a>
@@ -123,11 +123,11 @@
 
 <style>
     input[type="text"], input[type="date"], select, textarea {
-        @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+        @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors duration-300;
     }
     
     select {
-        @apply bg-white;
+        @apply bg-white dark:bg-gray-700;
     }
     
     textarea {
