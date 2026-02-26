@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login
+from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.db.models import Count, Q
 from django.http import Http404
 from .models import Application
-from .forms import ApplicationForm, CustomUserCreationForm
+from .forms import ApplicationForm, CustomUserCreationForm, CustomAuthenticationForm
 
 
 def register_view(request):
@@ -14,12 +14,46 @@ def register_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # Specify the backend when logging in
+            user.backend = 'tracker_app.backends.EmailAuthBackend'
             login(request, user)
             messages.success(request, 'Registration successful! Welcome to Placement Tracker.')
             return redirect('dashboard')
     else:
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
+
+
+def login_view(request):
+    """Custom login view that works with CustomUser and email authentication"""
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+        
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            user.backend = 'tracker_app.backends.EmailAuthBackend'
+            login(request, user)
+            messages.success(request, f'Welcome back, {user.username}!')
+            next_page = request.GET.get('next', 'dashboard')
+            return redirect(next_page)
+        else:
+            messages.error(request, 'Please enter a valid email/username and password.')
+    else:
+        form = CustomAuthenticationForm()
+    
+    return render(request, 'registration/login.html', {'form': form})
+
+
+def logout_view(request):
+    """Custom logout view that handles both GET and POST requests"""
+    if request.user.is_authenticated:
+        username = request.user.username
+        logout(request)
+        messages.success(request, f'Goodbye, {username}! You have been logged out.')
+    
+    return redirect('login')
 
 
 @login_required

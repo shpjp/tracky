@@ -1,0 +1,27 @@
+{
+  "name": "tracky",
+  "version": "1.0.0",
+  "description": "A secure job application tracking system for students with authentication and Kanban-style dashboard built with Django.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shpjp/tracky.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/shpjp/tracky/issues"
+  },
+  "homepage": "https://github.com/shpjp/tracky#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.2.1"
+  }
+}

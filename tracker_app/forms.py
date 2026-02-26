@@ -1,7 +1,44 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from .models import Application
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import authenticate
+from .models import Application, CustomUser
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    """Custom authentication form that allows login with email or username"""
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Update the username field to accept email or username
+        self.fields['username'].label = 'Email or Username'
+        self.fields['username'].widget.attrs.update({
+            'class': 'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white',
+            'placeholder': 'Enter your email or username'
+        })
+        self.fields['password'].widget.attrs.update({
+            'class': 'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white',
+            'placeholder': 'Enter your password'
+        })
+    
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        
+        if username and password:
+            # Try authentication with our custom backend
+            self.user_cache = authenticate(
+                self.request,
+                username=username,
+                password=password
+            )
+            if self.user_cache is None:
+                raise forms.ValidationError(
+                    "Please enter a correct email/username and password. Note that both fields may be case-sensitive."
+                )
+            else:
+                self.confirm_login_allowed(self.user_cache)
+        
+        return self.cleaned_data
 
 
 class ApplicationForm(forms.ModelForm):
@@ -39,8 +76,14 @@ class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
     
     class Meta:
-        model = User
+        model = CustomUser
         fields = ("username", "email", "password1", "password2")
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            raise forms.ValidationError("A user with this email already exists.")
+        return email
     
     def save(self, commit=True):
         user = super().save(commit=False)
