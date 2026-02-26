@@ -8,6 +8,10 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     
+    # AJAX endpoints for duplicate checking
+    path('api/check-username/', views.check_username_availability, name='check_username'),
+    path('api/check-email/', views.check_email_availability, name='check_email'),
+    
     # Application URLs
     path('', views.dashboard_view, name='dashboard'),
     path('create/', views.create_application, name='create_application'),

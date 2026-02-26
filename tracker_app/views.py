@@ -3,24 +3,84 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.db.models import Count, Q
-from django.http import Http404
-from .models import Application
+from django.http import Http404, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET
+import json
+from .models import Application, CustomUser
 from .forms import ApplicationForm, CustomUserCreationForm, CustomAuthenticationForm
 
 
+@require_GET
+def check_username_availability(request):
+    """AJAX endpoint to check username availability"""
+    username = request.GET.get('username', '').strip()
+    
+    if not username:
+        return JsonResponse({'error': 'Username is required'}, status=400)
+    
+    if len(username) < 3:
+        return JsonResponse({'error': 'Username must be at least 3 characters'}, status=400)
+    
+    # Check if username exists (case-insensitive)
+    exists = CustomUser.objects.filter(username__iexact=username).exists()
+    
+    return JsonResponse({
+        'available': not exists,
+        'message': 'Username available' if not exists else f'Username "{username}" is already taken'
+    })
+
+
+@require_GET
+def check_email_availability(request):
+    """AJAX endpoint to check email availability"""
+    email = request.GET.get('email', '').strip()
+    
+    if not email:
+        return JsonResponse({'error': 'Email is required'}, status=400)
+    
+    if '@' not in email:
+        return JsonResponse({'error': 'Invalid email format'}, status=400)
+    
+    # Check if email exists (case-insensitive)
+    exists = CustomUser.objects.filter(email__iexact=email).exists()
+    
+    return JsonResponse({
+        'available': not exists,
+        'message': 'Email available' if not exists else f'An account with email "{email}" already exists'
+    })
+
+
 def register_view(request):
-    """User registration view"""
+    """User registration view with duplicate account prevention"""
+    if request.user.is_authenticated:
+        messages.info(request, 'You are already logged in!')
+        return redirect('dashboard')
+        
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            # Specify the backend when logging in
-            user.backend = 'tracker_app.backends.EmailAuthBackend'
-            login(request, user)
-            messages.success(request, 'Registration successful! Welcome to Placement Tracker.')
-            return redirect('dashboard')
+            try:
+                user = form.save()
+                # Specify the backend when logging in
+                user.backend = 'tracker_app.backends.EmailAuthBackend'
+                login(request, user)
+                messages.success(request, f'Welcome to Placement Tracker, {user.username}! Your account has been created successfully.')
+                return redirect('dashboard')
+            except Exception as e:
+                messages.error(request, 'An error occurred during registration. Please try again.')
+        else:
+            # Show specific error messages for duplicate accounts
+            if form.errors:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        if 'already' in error.lower():
+                            messages.error(request, error)
+                        else:
+                            messages.error(request, f'{field.replace("_", " ").title()}: {error}')
     else:
         form = CustomUserCreationForm()
+    
     return render(request, 'registration/register.html', {'form': form})
 
 

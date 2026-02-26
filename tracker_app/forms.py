@@ -73,16 +73,62 @@ class ApplicationForm(forms.ModelForm):
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white',
+            'placeholder': 'Enter your email address'
+        })
+    )
     
     class Meta:
         model = CustomUser
         fields = ("username", "email", "password1", "password2")
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white',
+                'placeholder': 'Choose a username'
+            })
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Style password fields
+        self.fields['password1'].widget.attrs.update({
+            'class': 'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white',
+            'placeholder': 'Create a password'
+        })
+        self.fields['password2'].widget.attrs.update({
+            'class': 'w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white',
+            'placeholder': 'Confirm your password'
+        })
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not username:
+            return username
+            
+        # Check if username already exists
+        if CustomUser.objects.filter(username__iexact=username).exists():
+            existing_user = CustomUser.objects.get(username__iexact=username)
+            raise forms.ValidationError(
+                f"Username '{username}' is already taken. Please choose a different username or "
+                f"try logging in if this is your account."
+            )
+        return username
     
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        if CustomUser.objects.filter(email=email).exists():
-            raise forms.ValidationError("A user with this email already exists.")
+        if not email:
+            return email
+            
+        # Check if email already exists
+        if CustomUser.objects.filter(email__iexact=email).exists():
+            existing_user = CustomUser.objects.get(email__iexact=email)
+            raise forms.ValidationError(
+                f"An account with email '{email}' already exists. "
+                f"Please use a different email or try logging in if this is your account."
+            )
         return email
     
     def save(self, commit=True):
