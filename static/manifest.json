@@ -1,0 +1,22 @@
+{
+  "name": "Tracky - Placement Tracker",
+  "short_name": "Tracky",
+  "description": "Track your job applications and placement progress",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/static/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ]
+}
